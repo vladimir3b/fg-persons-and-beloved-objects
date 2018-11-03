@@ -1,0 +1,19 @@
+<kendo-window
+  title="Please provide additional data"
+  *ngIf="opened"
+  (close)="close()"
+  [minWidth]="250"
+  [width]="450">
+  <kendo-window-titlebar class="bg-info p-1 pl-3">
+    <div class="k-window-title">
+      <ng-content select=".window-title"></ng-content>
+    </div>
+    <button kendoWindowRestoreAction></button>
+    <button kendoWindowMinimizeAction></button>
+    <button kendoWindowMaximizeAction></button>
+    <button kendoWindowCloseAction></button>
+  </kendo-window-titlebar>
+
+  <ng-content select=".window-content"></ng-content>
+
+</kendo-window>
