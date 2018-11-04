@@ -9,7 +9,7 @@ export class BelovedObject implements IObject {
     public id: string,
     public age: number,
     public color: string,
-    public object: string,
+    public type: string,
     public about: string,
     public personId: string,
   ) {}

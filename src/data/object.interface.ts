@@ -2,7 +2,7 @@ export interface IObject {
   id: string;
   age: number;
   color: string;
-  object: string;
+  type: string;
   about: string;
   personId: string;
 }

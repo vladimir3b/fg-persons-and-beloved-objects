@@ -16,7 +16,7 @@ interface IPerson {
   address: string;
   phone: string;
   age?: () => string;
-  listOfObjects?: () => Array<IObject>;
+  listOfObjectsIds?: () => Array<string>;
 }
 
 export {
