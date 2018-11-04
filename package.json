@@ -28,6 +28,7 @@
     "@progress/kendo-theme-default": "^2.59.0",
     "bootstrap-scss": "^4.1.3",
     "core-js": "^2.5.4",
+    "moment": "^2.22.2",
     "rxjs": "~6.2.0",
     "rxjs-compat": "^6.0.0",
     "zone.js": "~0.8.26"
@@ -39,6 +40,7 @@
     "@angular/language-service": "^6.1.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/moment": "^2.13.0",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.3.0",
     "jasmine-core": "~2.99.1",
