@@ -1,93 +1,27 @@
 <div class="row">
-  <div class="col text-info bg-light display-3 pt-2 pb-3 text-center">
-    FG Persons and Beloved Objects
+  <div class="col text-warning bg-primary display-4 pb-4 pt-3 text-center">
+    <strong>Persons And Their Beloved Objects</strong>
   </div>
 </div>
-<div class="row">
-  <div class="col bg-white">
-    <mat-tab-group dynamicHeight>
-      <mat-tab label="First">
-        <div style="height: 650px">
-          <button
-            class="btn btn-info"
-            *ngIf="!opened"
-            (click)="opened=true">
-            Open window
-          </button>
-          <fg-kui-window [(opened)]="opened">
-            <div class="window-title">A Nice Title For A Nice Window</div>
-            <div class="window-content">
-              Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Nisi asperiores, voluptates ipsa quae eum rem
-              in? Assumenda sunt amet voluptas, minus totam quas
-              culpa! Reprehenderit nemo exercitationem, explicabo
-              suscipit adipisci qui, amet debitis minima accusantium
-              molestias modi quasi officiis, praesentium non magni
-              libero.
-            </div>
-          </fg-kui-window>
-        </div>
-
-      </mat-tab>
-      <mat-tab label="Second">
-        <div class="container pb-5">
-          <div class="row">
-            <div class="col">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste quam accusamus
-              tempora quidem autem temporibus ab, magnam dicta, porro modi facere beatae
-              minus tenetur quisquam rem reiciendis deleniti eum! In sequi debitis quo labore
-              ipsum reprehenderit cupiditate ut nesciunt modi rerum doloremque sunt illum nemo
-              id non quae accusamus, commodi molestias sint iure aperiam nisi. Ipsam molestiae
-              totam porro veritatis corrupti quo nihil in quaerat? Voluptates nemo sit architecto
-              dolor eos, ea, ducimus quod eaque nobis cumque blanditiis, perspiciatis recusandae
-              distinctio asperiores quibusdam in? Itaque recusandae non dignissimos voluptatum,
-              voluptatem veniam animi quas laborum nihil voluptates esse ullam temporibus ut eius,
-              ea pariatur dolores voluptate? Vero esse tempore accusamus voluptas assumenda
-              perspiciatis perferendis placeat nesciunt at, pariatur voluptatibus delectus error
-              voluptates commodi rem nemo quaerat praesentium. Beatae hic veritatis commodi
-              quaerat reiciendis voluptatum quis cum, nulla, laudantium nam inventore, ab minus
-              alias quidem! Ullam dolorem dolores fugit! Neque rem asperiores quos iure dicta minus.
-              Vitae modi eum ipsa voluptatem quis. Sed ad dolore, rem reiciendis at itaque? Amet,
-              facilis voluptates. Cupiditate esse libero expedita totam eos enim quidem fugit a
-              ccusamus magni repudiandae. Voluptates praesentium omnis deserunt sed officia deleniti
-              veniam dolorum odio libero perspiciatis, animi placeat pariatur explicabo fugit excepturi
-              quia aliquam iusto accusamus ex nisi quis eveniet ratione molestias voluptate? Eaque
-              dolor aspernatur dolores nobis libero deserunt aliquam id reprehenderit ratione saepe
-              possimus fugiat, optio impedit velit veniam non quidem eos tenetur architecto. Soluta,
-              dolores nulla? Dolorum sed in cumque iure nulla ullam id. Illo voluptate voluptatibus
-              consequatur facere!
-            </div>
-            <div class="col">
-              <div class="row">
-                <div class="col bg-danger display-1 text-center" style="height: 150px">Word 1</div>
-              </div>
-              <div class="row">
-                <div class="col bg-warning display-1 text-center" style="height: 150px">Word 2</div>
-              </div>
-              <div class="row">
-                <div class="col bg-primary display-1 text-center" style="height: 150px">Word 3</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </mat-tab>
-      <mat-tab label="Third">
-        <fg-custom-component></fg-custom-component>
-      </mat-tab>
-      <mat-tab
-        *ngFor="let tab of closeableTabs; let index = index">
-        <ng-template mat-tab-label>
-          {{ tab.title }}
-          <button  (click)="onCloseTab(index)" class="btn btn-link">x</button>
-        </ng-template>
-        <h1>{{ tab.content }}</h1>
-        <fg-custom-component></fg-custom-component><br>
-        <button
-          (click)="onCloseTab(index)"
-          class="btn btn-danger">
-          Close tab
-        </button>
-      </mat-tab>
-    </mat-tab-group>
+<div class="row bg-white pb-3 pt-3">
+  <div class="col">
+    <mat-accordion>
+      <mat-expansion-panel 
+        *ngFor="let id of listOfPersonsIds"
+        class="alert-info">
+        <mat-expansion-panel-header class="alert-danger">
+          <mat-panel-title>
+            {{ id }} 
+          </mat-panel-title>
+          <mat-panel-description>
+            Type your name and age
+          </mat-panel-description>          
+        </mat-expansion-panel-header>
+        <pre>
+          <!-- {{ person(id) | json }} -->
+        </pre>
+       
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ManageItemsService } from './manage-items.service';
+import { ManageItemsService, IModifiedItem } from './manage-items.service';
 import { IObject } from 'src/data/object.interface';
 import { objects } from 'src/data/object.data';
 import { BelovedObject } from 'src/data/object.class';
@@ -24,7 +24,7 @@ export class ManageObjectsService {
    * Life Cycle Hooks
    */
   constructor(private _manageItems: ManageItemsService<IObject, IManageObjectsMetadata, string>) {
-    this._manageItems.listOfItemsWasModified.subscribe((modifiedObjects) => {
+    this._manageItems.listOfItemsWasModified.subscribe((modifiedObjects: IModifiedItem<string>) => {
       this.listOfObjectsIds = this._manageItems.listOfItemsIds('beloved-object');
     });
     this._manageItems.initialize(objects, {

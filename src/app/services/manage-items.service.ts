@@ -33,7 +33,7 @@ class ManageItemsService<T extends IItem<V>, U, V> {
   /**
    * Properties
    */
-  public listOfItems: Array<IManageItems<T, U, V>>;
+  public listOfItems: Array<IManageItems<T, U, V>> = [];
   public listOfItemsWasModified: Subject<IModifiedItem<V>> = new Subject();
 
   /**

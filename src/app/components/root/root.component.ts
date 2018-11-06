@@ -1,4 +1,7 @@
+import { IPerson } from 'src/data/person.interface';
 import { Component, OnInit } from '@angular/core';
+import { ManagePersonsService } from 'src/app/services/manage-persons.service';
+import { Person } from 'src/data/person.class';
 
 interface ICloseableTab {
   title: string;
@@ -15,30 +18,25 @@ export class RootComponent implements OnInit {
     /**
    * Properties
    */
-  public opened: boolean;
-  public closeableTabs: Array<ICloseableTab> = [];
+  public listOfPersonsIds: Array<string> = [];
 
   /**
    * Life Cycle Hooks
    */
-  constructor() { }
+  constructor(private _managePersons: ManagePersonsService) {
+    this.listOfPersonsIds = this._managePersons.listOfPersonsIds;
+  }
 
   ngOnInit() {
-    this.opened = false;
-    for (let i: number = 0; i <= 50; i++) {
-      this.closeableTabs.push({
-        title: `Title ${i}`,
-        content: `Content ${i}`
-      });
-    }
+    const testPerson = new Person('sdfsdfsf', '19991212', {firstName: 'adfsdf', lastName: 'etwaer'}, 'female','werwer','54545');
+    console.log(testPerson);
   }
 
     /**
    * Methods
    */
-
-   public onCloseTab(index: number): void {
-    this.closeableTabs.splice(index, 1);
+  public person(id: string): IPerson {
+    return this._managePersons.person(id);
   }
 
 }
