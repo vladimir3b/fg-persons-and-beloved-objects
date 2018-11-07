@@ -1,40 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { IPerson } from 'src/data/person.interface';
 
-type TypeOfItem = 'beloved-object' | 'person';
 type TypeOfOperation = 'add' | 'delete';
 
-interface IItem<V> {
-  id: V;
+interface IManagedItem<Item, ItemMetadata> {
+  item: Item;
+  metadata: ItemMetadata;
 }
 
-interface IManageItems<T extends IItem<V>, U, V> {
-  obj: T;
-  typeOfItem: TypeOfItem;
-  metadata: U;
-}
-
-interface IModifiedItem<V> {
-  id: V;
-  typeOfItem: TypeOfItem;
-  operation: TypeOfOperation;
-}
 
 @Injectable({
   providedIn: 'root'
 })
-class ManageItemsService<T extends IItem<V>, U, V> {
-  /**
-   *  T = type/interface of items - persons or objects
-   *  U = type/interface of metadata - to mark edited items
-   *  V = type of ids, generally we use string
-   */
+class ManageItemsService<    
+    Item,     
+    ItemMetadata,
+    ItemsModifiedEvent
+  > {
+
 
   /**
    * Properties
    */
-  private _listOfItems: Array<IManageItems<T, U, V>> = [];
-  public listOfItemsWasModified: Subject<IModifiedItem<V>> = new Subject();
 
   /**
    * Life Cycle Hooks
@@ -51,12 +39,7 @@ class ManageItemsService<T extends IItem<V>, U, V> {
   private _indexForId(id: V, typeOfItem: TypeOfItem): number {
     return this._listOfItems.findIndex((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem));
   }
-
-  public initialize(listOfItems: Array<T>, metadata: U, typeOfItem: TypeOfItem): void {
-    listOfItems.forEach((item: T) => {
-      this.add(item, metadata, typeOfItem);
-    });
-  }
+  
 
   public listOfItemsIds(typeOfItem: TypeOfItem): Array<V> {
     const list: Array<V> = [];
@@ -72,17 +55,16 @@ class ManageItemsService<T extends IItem<V>, U, V> {
     return clone(this._item(id, typeOfItem));
   }
 
-  public add(obj: T,  metadata: U, typeOfItem: TypeOfItem): void {
-    this._listOfItems.push({
-      obj,
-      metadata,
-      typeOfItem
-    });
-    this.listOfItemsWasModified.next({
-      id: obj.id,
-      typeOfItem,
-      operation: 'add'
-    });
+  public add(
+    managedItems: Array<IManagedItem<Item, ItemMetadata>>,
+    item: Item,
+    metadata: ItemMetadata,
+    itemsModified: Subject<ItemsModifiedEvent>
+    ): void {  
+    managedItems.push({
+      item,
+      metadata
+    })
   }
 
   public delete(id: V, typeOfItem: TypeOfItem): void {
@@ -109,8 +91,7 @@ class ManageItemsService<T extends IItem<V>, U, V> {
 }
 
 export {
-  TypeOfItem,
-  IModifiedItem,
+  IManagedItem,
   TypeOfOperation,
   ManageItemsService
 };

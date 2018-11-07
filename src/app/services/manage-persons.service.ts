@@ -1,12 +1,30 @@
 import { Injectable } from '@angular/core';
 
 import { IPerson } from 'src/data/person.interface';
-import { ManageItemsService, IModifiedItem } from './manage-items.service';
 import { persons } from 'src/data/person.data';
 import { Person } from 'src/data/person.class';
+import { Subject } from 'rxjs';
+import { ManageItemsService, IManagedItem } from './manage-items.service';
 
-interface IManagePersonsMetadata {
+
+type TypeOfOperation = 'add' | 'delete';
+type ManagedPerson = IManagedItem<IPerson, IPersonMetadata>;
+
+interface IPersonMetadata {
   markedForEdit: boolean;
+}
+
+interface IPersonsModifiedEvent {
+  id: string;
+  operation: TypeOfOperation;
+}
+
+const isEditedMetadata: IPersonMetadata = {
+  markedForEdit: true
+}
+
+const isNotEditedMetadata: IPersonMetadata = {
+  markedForEdit: false
 }
 
 @Injectable({
@@ -18,20 +36,17 @@ export class ManagePersonsService {
    * Properties
    */
   public listOfPersonsIds: Array<string> = [];
+  private _managedPersons: Array<ManagedPerson> = [];
+  public personsModified: Subject<IPersonsModifiedEvent> = new Subject();
 
    /**
     * Life Cycle Hooks
     */
-  constructor(
-    private _manageItems: ManageItemsService<IPerson, IManagePersonsMetadata, string>
-  ) {
-    this._manageItems.listOfItemsWasModified.subscribe((modifiedPersons: IModifiedItem<string>) => {
-      this.listOfPersonsIds = this._manageItems.listOfItemsIds('person');
-    });
-    this._manageItems.initialize(persons, {
-      markedForEdit: false
-    }, 'person');
-  }
+  constructor(private _manageItems: ManageItemsService<  
+      IPerson,       
+      IPersonMetadata,
+      IPersonsModifiedEvent
+    >) {}
 
   /**
    * Methods
@@ -47,32 +62,41 @@ export class ManagePersonsService {
     );
   }
 
-  public person(id: string): IPerson {
-    return this._manageItems.item(id, this._clone, 'person');
+  public simulateReadData() {
+    persons.forEach((person: IPerson) => {
+      this.add(person);
+    });
   }
 
   public add(person: IPerson): void {
-    this._manageItems.add(person, {
-      markedForEdit: false
-    }, 'person');
+    this._manageItems.add(
+      this._managedPersons,
+      person, 
+      isNotEditedMetadata, 
+      this.personsModified     
+    );
+  }
+
+  public person(id: string): IPerson {
+    return this._manageItems.item(this._managedPersons, id, this._clone);
   }
 
   public update(id: string, newPerson: IPerson): void {
-    this._manageItems.update(id, newPerson, this._clone, 'person');
+    this._manageItems.update(this._managedPersons, id, newPerson, this._clone);
   }
 
   public delete(id: string): void {
-    this._manageItems.delete(id, 'person');
-  }
-
-  public markedForEdit(id: string): boolean {
-    return this._manageItems.metadata(id, 'person').markedForEdit;
+    this._manageItems.delete(this._managedPersons, this.modifiedListOfPersons, id);
   }
 
   public markForEdit(id: string): void {
-    this._manageItems.changeMetadata(id, {
+    this._manageItems.changeMetadata(this._managedPersons, id, {
       markedForEdit: true
-    }, 'person');
+    });
+  }
+
+  public markedForEdit(id: string): boolean {
+    return this._manageItems.metadata(this._managedPersons, id, 'person').markedForEdit;
   }
 
 }
