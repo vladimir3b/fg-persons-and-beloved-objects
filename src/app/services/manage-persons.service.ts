@@ -4,19 +4,13 @@ import { IPerson } from 'src/data/person.interface';
 import { persons } from 'src/data/person.data';
 import { Person } from 'src/data/person.class';
 import { Subject } from 'rxjs';
-import { ManageItemsService, IManagedItem } from './manage-items.service';
+import { ManageItemsService, IManagedItem, IItemModifiedEvent } from './manage-items.service';
 
-
-type TypeOfOperation = 'add' | 'delete';
-type ManagedPerson = IManagedItem<IPerson, IPersonMetadata>;
+type ManagedPerson = IManagedItem<IPerson, IPersonMetadata, string>;
+type PersonsModifiedEvent = IItemModifiedEvent<string>;
 
 interface IPersonMetadata {
   markedForEdit: boolean;
-}
-
-interface IPersonsModifiedEvent {
-  id: string;
-  operation: TypeOfOperation;
 }
 
 const isEditedMetadata: IPersonMetadata = {
@@ -45,7 +39,7 @@ export class ManagePersonsService {
   constructor(private _manageItems: ManageItemsService<  
       IPerson,       
       IPersonMetadata,
-      IPersonsModifiedEvent
+      string
     >) {}
 
   /**

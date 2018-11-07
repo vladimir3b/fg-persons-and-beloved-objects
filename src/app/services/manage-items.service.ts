@@ -4,19 +4,27 @@ import { IPerson } from 'src/data/person.interface';
 
 type TypeOfOperation = 'add' | 'delete';
 
-interface IManagedItem<Item, ItemMetadata> {
+interface IItem<Id> {
+  id: Id;
+}
+
+interface IManagedItem<Item extends IItem<Id>, ItemMetadata, Id> {
   item: Item;
   metadata: ItemMetadata;
 }
 
+interface IItemModifiedEvent<V> {
+  id: V;
+  operation: TypeOfOperation;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 class ManageItemsService<    
-    Item,     
+    Item extends IItem<Id>,     
     ItemMetadata,
-    ItemsModifiedEvent
+    Id
   > {
 
 
@@ -56,14 +64,18 @@ class ManageItemsService<
   }
 
   public add(
-    managedItems: Array<IManagedItem<Item, ItemMetadata>>,
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
     item: Item,
     metadata: ItemMetadata,
-    itemsModified: Subject<ItemsModifiedEvent>
+    itemsModified: Subject<IItemModifiedEvent<Id>>
     ): void {  
     managedItems.push({
       item,
       metadata
+    });
+    itemsModified.next({
+      id: item.id,
+      operation: 'add'
     })
   }
 
@@ -92,6 +104,7 @@ class ManageItemsService<
 
 export {
   IManagedItem,
+  IItemModifiedEvent,
   TypeOfOperation,
   ManageItemsService
 };
