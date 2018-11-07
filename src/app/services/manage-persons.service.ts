@@ -15,11 +15,11 @@ interface IPersonMetadata {
 
 const isEditedMetadata: IPersonMetadata = {
   markedForEdit: true
-}
+};
 
 const isNotEditedMetadata: IPersonMetadata = {
   markedForEdit: false
-}
+};
 
 @Injectable({
   providedIn: 'root'
@@ -31,13 +31,13 @@ export class ManagePersonsService {
    */
   public listOfPersonsIds: Array<string> = [];
   private _managedPersons: Array<ManagedPerson> = [];
-  public personsModified: Subject<IPersonsModifiedEvent> = new Subject();
+  public personsModified: Subject<PersonsModifiedEvent> = new Subject();
 
    /**
     * Life Cycle Hooks
     */
-  constructor(private _manageItems: ManageItemsService<  
-      IPerson,       
+  constructor(private _manageItems: ManageItemsService<
+      IPerson,
       IPersonMetadata,
       string
     >) {}
@@ -65,9 +65,17 @@ export class ManagePersonsService {
   public add(person: IPerson): void {
     this._manageItems.add(
       this._managedPersons,
-      person, 
-      isNotEditedMetadata, 
-      this.personsModified     
+      person,
+      isNotEditedMetadata,
+      this.personsModified
+    );
+  }
+
+  public delete(id: string): void {
+    this._manageItems.delete(
+      this._managedPersons,
+      id,
+      this.personsModified
     );
   }
 
@@ -79,9 +87,7 @@ export class ManagePersonsService {
     this._manageItems.update(this._managedPersons, id, newPerson, this._clone);
   }
 
-  public delete(id: string): void {
-    this._manageItems.delete(this._managedPersons, this.modifiedListOfPersons, id);
-  }
+
 
   public markForEdit(id: string): void {
     this._manageItems.changeMetadata(this._managedPersons, id, {
@@ -90,7 +96,7 @@ export class ManagePersonsService {
   }
 
   public markedForEdit(id: string): boolean {
-    return this._manageItems.metadata(this._managedPersons, id, 'person').markedForEdit;
+    return this._manageItems.metadata(this._managedPersons, id).markedForEdit;
   }
 
 }

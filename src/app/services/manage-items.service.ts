@@ -21,8 +21,8 @@ interface IItemModifiedEvent<V> {
 @Injectable({
   providedIn: 'root'
 })
-class ManageItemsService<    
-    Item extends IItem<Id>,     
+class ManageItemsService<
+    Item extends IItem<Id>,
     ItemMetadata,
     Id
   > {
@@ -40,27 +40,33 @@ class ManageItemsService<
   /**
    * Methods
    */
-  private _item(id: V, typeOfItem: TypeOfItem): T {
-    return this._listOfItems.find((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem)).obj;
+  private _indexForId(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id
+  ): number {
+    return managedItems.findIndex((element: IManagedItem<Item, ItemMetadata, Id>) => (id === element.item.id));
   }
 
-  private _indexForId(id: V, typeOfItem: TypeOfItem): number {
-    return this._listOfItems.findIndex((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem));
+  private _item(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id
+  ): Item {
+    return managedItems[this._indexForId(managedItems, id)].item;
   }
-  
 
-  public listOfItemsIds(typeOfItem: TypeOfItem): Array<V> {
-    const list: Array<V> = [];
-    this._listOfItems.forEach((item: IManageItems<T, U, V>) => {
-      if (item.typeOfItem === typeOfItem) {
-        list.push(item.obj.id);
-      }
+  public listOfItemsIds(managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>): Array<Id> {
+    const list: Array<Id> = [];
+    managedItems.forEach((element: IManagedItem<Item, ItemMetadata, Id>) => {
+        list.push(element.item.id);
     });
     return list;
   }
 
-  public item(id: V, clone: (item: T) => T, typeOfItem: TypeOfItem): T {
-    return clone(this._item(id, typeOfItem));
+  public item(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id, clone: (item: Item) => Item
+  ): Item {
+    return clone(this._item(managedItems, id));
   }
 
   public add(
@@ -68,7 +74,7 @@ class ManageItemsService<
     item: Item,
     metadata: ItemMetadata,
     itemsModified: Subject<IItemModifiedEvent<Id>>
-    ): void {  
+    ): void {
     managedItems.push({
       item,
       metadata
@@ -76,28 +82,43 @@ class ManageItemsService<
     itemsModified.next({
       id: item.id,
       operation: 'add'
-    })
+    });
   }
 
-  public delete(id: V, typeOfItem: TypeOfItem): void {
-    this.listOfItemsWasModified.next({
-      id: this._item(id, typeOfItem).id,
-      typeOfItem,
+  public delete(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id,
+    itemsModified: Subject<IItemModifiedEvent<Id>>
+  ): void {
+    itemsModified.next({
+      id: id,
       operation: 'delete'
     });
-    this._listOfItems.splice(this._indexForId(id, typeOfItem), 1);
+    managedItems.splice(this._indexForId(managedItems, id), 1);
   }
 
-  public update(id: V, newItem: T, clone: (item: T) => T, typeOfItem: TypeOfItem ): void {
-    this._listOfItems[this._indexForId(id, typeOfItem)].obj = clone(newItem);
+  public update(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id,
+    newItem: Item,
+    clone: (item: Item) => Item
+  ): void {
+    managedItems[this._indexForId(managedItems, id)].item = clone(newItem);
   }
 
-  public changeMetadata(id: V, metadata: U, typeOfItem: TypeOfItem): void {
-    this._listOfItems[this._indexForId(id, typeOfItem)].metadata = metadata;
+  public changeMetadata(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id,
+    metadata: ItemMetadata
+  ): void {
+    managedItems[this._indexForId(managedItems, id)].metadata = metadata;
   }
 
-  public metadata(id: V, typeOfItem: TypeOfItem): U {
-    return this._listOfItems[this._indexForId(id, typeOfItem)].metadata;
+  public metadata(
+    managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
+    id: Id
+  ): ItemMetadata {
+    return managedItems[this._indexForId(managedItems, id)].metadata;
   }
 
 }
