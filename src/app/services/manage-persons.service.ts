@@ -22,7 +22,9 @@ export class ManagePersonsService {
    /**
     * Life Cycle Hooks
     */
-  constructor(private _manageItems: ManageItemsService<IPerson, IManagePersonsMetadata, string>) {
+  constructor(
+    private _manageItems: ManageItemsService<IPerson, IManagePersonsMetadata, string>
+  ) {
     this._manageItems.listOfItemsWasModified.subscribe((modifiedPersons: IModifiedItem<string>) => {
       this.listOfPersonsIds = this._manageItems.listOfItemsIds('person');
     });
@@ -53,6 +55,10 @@ export class ManagePersonsService {
     this._manageItems.add(person, {
       markedForEdit: false
     }, 'person');
+  }
+
+  public update(id: string, newPerson: IPerson): void {
+    this._manageItems.update(id, newPerson, this._clone, 'person');
   }
 
   public delete(id: string): void {

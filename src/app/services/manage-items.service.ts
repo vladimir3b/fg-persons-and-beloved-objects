@@ -33,7 +33,7 @@ class ManageItemsService<T extends IItem<V>, U, V> {
   /**
    * Properties
    */
-  public listOfItems: Array<IManageItems<T, U, V>> = [];
+  private _listOfItems: Array<IManageItems<T, U, V>> = [];
   public listOfItemsWasModified: Subject<IModifiedItem<V>> = new Subject();
 
   /**
@@ -45,11 +45,11 @@ class ManageItemsService<T extends IItem<V>, U, V> {
    * Methods
    */
   private _item(id: V, typeOfItem: TypeOfItem): T {
-    return this.listOfItems.find((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem)).obj;
+    return this._listOfItems.find((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem)).obj;
   }
 
   private _indexForId(id: V, typeOfItem: TypeOfItem): number {
-    return this.listOfItems.findIndex((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem));
+    return this._listOfItems.findIndex((item: IManageItems<T, U, V>) => (id === item.obj.id) && (item.typeOfItem === typeOfItem));
   }
 
   public initialize(listOfItems: Array<T>, metadata: U, typeOfItem: TypeOfItem): void {
@@ -60,7 +60,7 @@ class ManageItemsService<T extends IItem<V>, U, V> {
 
   public listOfItemsIds(typeOfItem: TypeOfItem): Array<V> {
     const list: Array<V> = [];
-    this.listOfItems.forEach((item: IManageItems<T, U, V>) => {
+    this._listOfItems.forEach((item: IManageItems<T, U, V>) => {
       if (item.typeOfItem === typeOfItem) {
         list.push(item.obj.id);
       }
@@ -73,7 +73,7 @@ class ManageItemsService<T extends IItem<V>, U, V> {
   }
 
   public add(obj: T,  metadata: U, typeOfItem: TypeOfItem): void {
-    this.listOfItems.push({
+    this._listOfItems.push({
       obj,
       metadata,
       typeOfItem
@@ -91,15 +91,19 @@ class ManageItemsService<T extends IItem<V>, U, V> {
       typeOfItem,
       operation: 'delete'
     });
-    this.listOfItems.splice(this._indexForId(id, typeOfItem), 1);
+    this._listOfItems.splice(this._indexForId(id, typeOfItem), 1);
+  }
+
+  public update(id: V, newItem: T, clone: (item: T) => T, typeOfItem: TypeOfItem ): void {
+    this._listOfItems[this._indexForId(id, typeOfItem)].obj = clone(newItem);
   }
 
   public changeMetadata(id: V, metadata: U, typeOfItem: TypeOfItem): void {
-    this.listOfItems[this._indexForId(id, typeOfItem)].metadata = metadata;
+    this._listOfItems[this._indexForId(id, typeOfItem)].metadata = metadata;
   }
 
   public metadata(id: V, typeOfItem: TypeOfItem): U {
-    return this.listOfItems[this._indexForId(id, typeOfItem)].metadata;
+    return this._listOfItems[this._indexForId(id, typeOfItem)].metadata;
   }
 
 }

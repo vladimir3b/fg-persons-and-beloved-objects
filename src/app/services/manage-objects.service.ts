@@ -60,6 +60,10 @@ export class ManageObjectsService {
     this._manageItems.delete(id, 'beloved-object');
   }
 
+  public update(id: string, newObject: IObject): void {
+    this._manageItems.update(id, newObject, this._clone, 'beloved-object');
+  }
+
   public markedForEdit(id: string): boolean {
     return this._manageItems.metadata(id, 'beloved-object').markedForEdit;
   }

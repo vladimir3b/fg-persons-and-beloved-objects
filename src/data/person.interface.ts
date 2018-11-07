@@ -15,8 +15,8 @@ interface IPerson {
   gender: GenderType;
   address: string;
   phone: string;
+  listOfObjectsIds?: Array<string>;
   age?: () => string;
-  listOfObjectsIds?: () => Array<string>;
 }
 
 export {
