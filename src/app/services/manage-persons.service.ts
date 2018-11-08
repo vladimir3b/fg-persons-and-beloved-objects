@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { ManageItemsService, IManagedItem, IItemModifiedEvent } from './manage-items.service';
 
 type ManagedPerson = IManagedItem<IPerson, IPersonMetadata, string>;
-type PersonsModifiedEvent = IItemModifiedEvent<string>;
+type PersonsModifiedEvent = IItemModifiedEvent<IPerson>;
 
 interface IPersonMetadata {
   markedForEdit: boolean;

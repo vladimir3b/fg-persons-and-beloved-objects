@@ -7,9 +7,9 @@
   <div class="col">
     <mat-accordion>
       <mat-expansion-panel
-        *ngFor="let id of listOfPersonsIds"
+        *ngFor="let id of listOfPersonsIds | slice : firstIndex : lastIndex"
         class="alert-info">
-        <mat-expansion-panel-header class="alert-danger row">
+        <mat-expansion-panel-header class="alert-secondary row">
           <mat-panel-title class="col-9">
             <strong>{{ appellative[person(id).gender] }}</strong>&nbsp;
             {{ person(id).name.firstName }} {{ person(id).name.lastName }} is
@@ -18,10 +18,90 @@
           <mat-panel-description class="col-3">
             Click to see more...
           </mat-panel-description>
-        </mat-expansion-panel-header>
-        <pre>
-          {{ person(id) | json }}
-        </pre>
+        </mat-expansion-panel-header>       
+          <div class="container">
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                First Name:
+              </div>
+              <div 
+                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                {{ person(id).name.firstName }}
+              </div>
+            </div>
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                Middle Name:
+              </div>
+              <div 
+                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                {{ person(id).name.middleName }}
+              </div>
+            </div>
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                Last Name:
+              </div>
+              <div 
+                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                {{ person(id).name.lastName }}
+              </div>
+            </div>
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                Gender:
+              </div>
+              <div 
+                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                {{ person(id).gender }}
+              </div>
+            </div>
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                Address:
+              </div>
+              <div 
+                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                {{ person(id).address }}
+              </div>
+            </div>
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                Phone:
+              </div>
+              <div 
+                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                {{ person(id).phone }}
+              </div>
+            </div>
+            <div class="row">
+              <div 
+                class="col-2 text-right bg-success pt-1 pb-1 text-white">
+                Objects
+              </div>
+              <div class="col pt-1 pb-1 border border-dark"></div>
+            </div>
+            <div class="row">
+              <div class="col-2 pt-3 pb-1">
+                <button class="btn btn-outline-info btn-sm btn-block">
+                  Edit person
+                </button>
+              </div>
+              <div class="col-2 pt-3 pb-1">
+                <button 
+                  (click)="delete(id)"
+                  class="btn btn-outline-danger btn-sm btn-block">
+                  Delete person
+                </button>
+              </div>
+            </div>
+          </div>      
 
       </mat-expansion-panel>
     </mat-accordion>
@@ -30,11 +110,11 @@
 <div class="row bg-white">
   <div class="col">
     <mat-paginator
+      showFirstLastButtons
       [length]="numberOfElements"
-      [(pageSize)]="numberOfElementsPerPage"
+      [(pageSize)]="pageSizeOptions[indexPageSizeOptions]"
       [pageSizeOptions]="pageSizeOptions"
-      (page)="pageEvent = $event">
+      (page)="changePage(pageEvent, $event)">
     </mat-paginator>
-    cacat {{numberOfElementsPerPage}}
   </div>
 </div>

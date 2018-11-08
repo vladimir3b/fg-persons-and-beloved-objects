@@ -13,8 +13,8 @@ interface IManagedItem<Item extends IItem<Id>, ItemMetadata, Id> {
   metadata: ItemMetadata;
 }
 
-interface IItemModifiedEvent<V> {
-  id: V;
+interface IItemModifiedEvent<Item> {
+  item: Item;
   operation: TypeOfOperation;
 }
 
@@ -73,14 +73,14 @@ class ManageItemsService<
     managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
     item: Item,
     metadata: ItemMetadata,
-    itemsModified: Subject<IItemModifiedEvent<Id>>
+    itemsModified: Subject<IItemModifiedEvent<Item>>
     ): void {
     managedItems.push({
       item,
       metadata
     });
     itemsModified.next({
-      id: item.id,
+      item: item,
       operation: 'add'
     });
   }
@@ -88,13 +88,14 @@ class ManageItemsService<
   public delete(
     managedItems: Array<IManagedItem<Item, ItemMetadata, Id>>,
     id: Id,
-    itemsModified: Subject<IItemModifiedEvent<Id>>
+    itemsModified: Subject<IItemModifiedEvent<Item>>
   ): void {
-    itemsModified.next({
-      id: id,
-      operation: 'delete'
-    });
+    let item: Item = this._item(managedItems, id);
     managedItems.splice(this._indexForId(managedItems, id), 1);
+    itemsModified.next({      
+      item: item,
+      operation: 'delete'
+    });    
   }
 
   public update(
