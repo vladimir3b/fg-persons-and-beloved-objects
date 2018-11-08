@@ -3,7 +3,29 @@
     <strong>Persons And Their Beloved Objects</strong>
   </div>
 </div>
-<div class="row bg-white pb-3 pt-3">
+
+<div class="row bg-white">
+  <div class="col">
+    <div class="container ">
+      <div class="row">
+        <div class="col-2 pb-3 pt-3">
+          <button class="btn btn-outline-primary btn-block btn-sm">Add new person</button>
+        </div>
+        <div class="col-2 pb-3 pt-3">
+          <button class="btn btn-outline-primary btn-block btn-sm">Add new object</button>
+        </div>
+        <div class="col-2 pb-3 pt-3">
+          <button class="btn btn-outline-danger btn-block btn-sm">Delete all persons</button>
+        </div>
+        <div class="col-2 pb-3 pt-3">
+          <button class="btn btn-outline-danger btn-block btn-sm" >Delete all objects</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row bg-white pl-2 pr-2">
   <div class="col">
     <mat-accordion>
       <mat-expansion-panel
@@ -13,79 +35,84 @@
           <mat-panel-title class="col-9">
             <strong>{{ appellative[person(id).gender] }}</strong>&nbsp;
             {{ person(id).name.firstName }} {{ person(id).name.lastName }} is
-            {{ person(id).age() }} years old.
+            {{ person(id).age() }} years old and has
+            {{ listOfObjectsForAPerson(id).length }} beloved objects.
           </mat-panel-title>
           <mat-panel-description class="col-3">
             Click to see more...
           </mat-panel-description>
-        </mat-expansion-panel-header>       
+        </mat-expansion-panel-header>
           <div class="container">
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 First Name:
               </div>
-              <div 
+              <div
                 class="col pt-1 pb-1 border border-dark border-bottom-0">
                 {{ person(id).name.firstName }}
               </div>
             </div>
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Middle Name:
               </div>
-              <div 
+              <div
                 class="col pt-1 pb-1 border border-dark border-bottom-0">
                 {{ person(id).name.middleName }}
               </div>
             </div>
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Last Name:
               </div>
-              <div 
+              <div
                 class="col pt-1 pb-1 border border-dark border-bottom-0">
                 {{ person(id).name.lastName }}
               </div>
             </div>
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Gender:
               </div>
-              <div 
+              <div
                 class="col pt-1 pb-1 border border-dark border-bottom-0">
                 {{ person(id).gender }}
               </div>
             </div>
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Address:
               </div>
-              <div 
+              <div
                 class="col pt-1 pb-1 border border-dark border-bottom-0">
                 {{ person(id).address }}
               </div>
             </div>
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Phone:
               </div>
-              <div 
+              <div
                 class="col pt-1 pb-1 border border-dark border-bottom-0">
                 {{ person(id).phone }}
               </div>
             </div>
             <div class="row">
-              <div 
+              <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Objects
               </div>
-              <div class="col pt-1 pb-1 border border-dark"></div>
+              <div class="col pt-1 pb-1 border border-dark">
+                <div *ngFor="let objectId of listOfObjectsForAPerson(id)">
+                  {{ object(objectId).type }} {{ object(objectId).color }}
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-2 pt-3 pb-1">
@@ -94,19 +121,21 @@
                 </button>
               </div>
               <div class="col-2 pt-3 pb-1">
-                <button 
+                <button
                   (click)="delete(id)"
                   class="btn btn-outline-danger btn-sm btn-block">
                   Delete person
                 </button>
               </div>
             </div>
-          </div>      
+          </div>
 
       </mat-expansion-panel>
     </mat-accordion>
   </div>
 </div>
+
+
 <div class="row bg-white">
   <div class="col">
     <mat-paginator

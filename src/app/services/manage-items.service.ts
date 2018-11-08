@@ -22,10 +22,10 @@ interface IItemModifiedEvent<Item> {
   providedIn: 'root'
 })
 class ManageItemsService<
-    Item extends IItem<Id>,
-    ItemMetadata,
-    Id
-  > {
+  Item extends IItem<Id>,
+  ItemMetadata,
+  Id
+> {
 
 
   /**
@@ -92,10 +92,10 @@ class ManageItemsService<
   ): void {
     let item: Item = this._item(managedItems, id);
     managedItems.splice(this._indexForId(managedItems, id), 1);
-    itemsModified.next({      
+    itemsModified.next({
       item: item,
       operation: 'delete'
-    });    
+    });
   }
 
   public update(

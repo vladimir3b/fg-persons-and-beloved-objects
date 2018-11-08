@@ -21,6 +21,7 @@ const isNotEditedMetadata: IPersonMetadata = {
   markedForEdit: false
 };
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -92,8 +93,6 @@ class ManagePersonsService {
     this._manageItems.update(this._managedPersons, id, newPerson, this._clone);
   }
 
-
-
   public markForEdit(id: string): void {
     this._manageItems.changeMetadata(this._managedPersons, id, {
       markedForEdit: true
@@ -105,6 +104,7 @@ class ManagePersonsService {
   }
 
 }
+
 
 export {
   PersonsModifiedEvent,

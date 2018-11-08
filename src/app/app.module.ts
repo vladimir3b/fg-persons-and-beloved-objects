@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTreeModule } from '@angular/material/tree';
 import { WindowModule } from '@progress/kendo-angular-dialog';
 
 import { RootComponent } from './components/root/root.component';
@@ -25,6 +26,7 @@ import { ManageItemsService } from './services/manage-items.service';
     MatTabsModule,
     MatExpansionModule,
     MatPaginatorModule,
+    MatTreeModule,
     DialogsModule,
     WindowModule
   ],
