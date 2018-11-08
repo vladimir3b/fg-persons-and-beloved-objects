@@ -28,8 +28,8 @@ export class Person implements IPerson {
   /**
    * Methods
    */
-  public age(): string {
-    return moment(this.birthDate, 'YYYYMMDD').fromNow();
+  public age(): number {
+    return Number(moment(this.birthDate, 'YYYYMMDD').fromNow().split(' ')[0]);
   }
 
 }

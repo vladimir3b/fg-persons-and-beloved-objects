@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { WindowModule } from '@progress/kendo-angular-dialog';
 
 import { RootComponent } from './components/root/root.component';
@@ -23,10 +24,11 @@ import { ManageItemsService } from './services/manage-items.service';
     BrowserAnimationsModule,
     MatTabsModule,
     MatExpansionModule,
+    MatPaginatorModule,
     DialogsModule,
     WindowModule
   ],
-  providers: [ 
+  providers: [
     ManageItemsService,
     ManageObjectsService,
     ManagePersonsService

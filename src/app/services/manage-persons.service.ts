@@ -24,12 +24,11 @@ const isNotEditedMetadata: IPersonMetadata = {
 @Injectable({
   providedIn: 'root'
 })
-export class ManagePersonsService {
+class ManagePersonsService {
 
   /**
    * Properties
    */
-  public listOfPersonsIds: Array<string> = [];
   private _managedPersons: Array<ManagedPerson> = [];
   public personsModified: Subject<PersonsModifiedEvent> = new Subject();
 
@@ -53,6 +52,12 @@ export class ManagePersonsService {
       person.gender,
       person.address,
       person.phone
+    );
+  }
+
+  public listOfPersonsIds(): Array<string> {
+    return this._manageItems.listOfItemsIds(
+      this._managedPersons
     );
   }
 
@@ -100,3 +105,8 @@ export class ManagePersonsService {
   }
 
 }
+
+export {
+  PersonsModifiedEvent,
+  ManagePersonsService
+};

@@ -6,22 +6,35 @@
 <div class="row bg-white pb-3 pt-3">
   <div class="col">
     <mat-accordion>
-      <mat-expansion-panel 
+      <mat-expansion-panel
         *ngFor="let id of listOfPersonsIds"
         class="alert-info">
-        <mat-expansion-panel-header class="alert-danger">
-          <mat-panel-title>
-            {{ id }} 
+        <mat-expansion-panel-header class="alert-danger row">
+          <mat-panel-title class="col-9">
+            <strong>{{ appellative[person(id).gender] }}</strong>&nbsp;
+            {{ person(id).name.firstName }} {{ person(id).name.lastName }} is
+            {{ person(id).age() }} years old.
           </mat-panel-title>
-          <mat-panel-description>
-            Type your name and age
-          </mat-panel-description>          
+          <mat-panel-description class="col-3">
+            Click to see more...
+          </mat-panel-description>
         </mat-expansion-panel-header>
         <pre>
-          <!-- {{ person(id) | json }} -->
+          {{ person(id) | json }}
         </pre>
-       
+
       </mat-expansion-panel>
     </mat-accordion>
+  </div>
+</div>
+<div class="row bg-white">
+  <div class="col">
+    <mat-paginator
+      [length]="numberOfElements"
+      [(pageSize)]="numberOfElementsPerPage"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = $event">
+    </mat-paginator>
+    cacat {{numberOfElementsPerPage}}
   </div>
 </div>

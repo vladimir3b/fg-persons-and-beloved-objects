@@ -1,6 +1,7 @@
 import { IPerson } from 'src/data/person.interface';
 import { Component, OnInit } from '@angular/core';
-import { ManagePersonsService } from 'src/app/services/manage-persons.service';
+
+import { ManagePersonsService, PersonsModifiedEvent } from 'src/app/services/manage-persons.service';
 import { Person } from 'src/data/person.class';
 
 interface ICloseableTab {
@@ -18,18 +19,29 @@ export class RootComponent implements OnInit {
     /**
    * Properties
    */
+  public numberOfElementsPerPage: number = 10;
+  public get numberOfElements(): number {
+    return this.listOfPersonsIds.length;
+  }
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  public appellative  = {
+    female: 'Mrs.',
+    male: 'Mr.'
+  };
   public listOfPersonsIds: Array<string> = [];
 
   /**
    * Life Cycle Hooks
    */
   constructor(private _managePersons: ManagePersonsService) {
-    this.listOfPersonsIds = this._managePersons.listOfPersonsIds;
+    this._managePersons.personsModified.subscribe((personModified: PersonsModifiedEvent) => {
+      // console.log(personModified.id);
+      this.listOfPersonsIds = this._managePersons.listOfPersonsIds();
+    });
   }
 
   ngOnInit() {
-    const testPerson = new Person('sdfsdfsf', '19991212', {firstName: 'adfsdf', lastName: 'etwaer'}, 'female','werwer','54545');
-    console.log(testPerson);
+    this._managePersons.simulateReadData();
   }
 
     /**
