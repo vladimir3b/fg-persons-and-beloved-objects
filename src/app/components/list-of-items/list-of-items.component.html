@@ -6,7 +6,7 @@
         (closed)="closed()"
         *ngFor="let id of listOfPersonsIds | slice : firstPersonsIndex : lastPersonsIndex; let index = index"
         class="alert-info">
-        <mat-expansion-panel-header class="alert-secondary row">
+        <mat-expansion-panel-header class="row" [ngClass]="{ 'alert-warning' : index !== indexOpenedPerson }">
           <mat-panel-title class="col-9">
             <strong>{{ appellative[person(id).gender] }}</strong>&nbsp;
             {{ person(id).name.firstName }} {{ person(id).name.lastName }} is
@@ -86,6 +86,9 @@
               <div class="col pt-1 pb-1 border border-dark bg-white">
                 <div *ngIf="index === indexOpenedPerson">
                   <div *ngFor="let objectId of listOfObjectsForAPerson(id) | slice : firstObjectsIndex : lastObjectsIndex">
+                    <mat-tree [dataSource]="">
+                        <!-- https://www.youtube.com/watch?v=BALaj39rbZE -->
+                    </mat-tree>
                     {{ object(objectId).type }} {{ object(objectId).color }}
                   </div>
                   <fg-navigator
