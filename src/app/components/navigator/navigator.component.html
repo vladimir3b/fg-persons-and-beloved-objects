@@ -1,0 +1,25 @@
+<div class="row bg-white">
+  <div class="col text-left">
+    <mat-paginator
+      [showFirstLastButtons]="showFirstLastButtons"
+      [length]="numberOfElements"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="pageIndex"
+      (page)="changePage($event)">
+    </mat-paginator>
+  </div>
+  <div class="col-4">
+    <mat-form-field>
+      <span class="mat-paginator">Go to page:</span>
+      <input
+        class="go-to-page-field"
+        type="number"
+        min="1"
+        [max]="numberOfPages()"
+        matInput
+        [ngModel]="pageIndex"
+        (ngModelChange)="goToPage($event)">
+    </mat-form-field>
+  </div>
+</div>

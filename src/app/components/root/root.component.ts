@@ -18,7 +18,7 @@ interface ICloseableTab {
 })
 export class RootComponent implements OnInit {
 
-    /**
+  /**
    * Properties
    */
   public appellative  = {
@@ -65,7 +65,7 @@ export class RootComponent implements OnInit {
     this.lastIndex = this.pageSizeOptions[this.indexPageSizeOptions];
   }
 
-    /**
+  /**
    * Methods
    */
   public person(id: string): IPerson {
@@ -80,18 +80,8 @@ export class RootComponent implements OnInit {
     return this._manageObjects.listOfObjectsForAPerson(personId);
   }
 
-  public changePage(pageEvent: any, $event: any) {
-    const first: number = $event.pageSize * $event.pageIndex;
-    const last: number = (($event.pageIndex + 1) * $event.pageSize <= $event.length) ?
-      ($event.pageIndex + 1) * $event.pageSize : $event.length;
-    this.firstIndex = first;
-    this.lastIndex = last;
-    pageEvent = $event;
-  }
-
   public delete(id: string): void {
     this._managePersons.delete(id);
   }
-
 
 }
