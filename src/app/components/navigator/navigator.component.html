@@ -9,10 +9,17 @@
       (page)="changePage($event)">
     </mat-paginator>
   </div>
-  <div class="col-4">
+  <div
+    *ngIf="showGoToPage"
+    class="col-2">
+    <label
+      for="goToPage"
+      class="go-to-page-label">
+      Go to page:&nbsp;
+    </label>
     <mat-form-field>
-      <span class="mat-paginator">Go to page:</span>
       <input
+        id="goToPage"
         class="go-to-page-field"
         type="number"
         min="1"

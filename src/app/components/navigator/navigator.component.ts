@@ -22,6 +22,7 @@ class NavigatorComponent implements OnInit {
   /**
    * Properties
    */
+  @Input() public showGoToPage: boolean;
   @Input() public showFirstLastButtons: boolean;
   @Input() public pageIndex: number;
   @Input() public pageSizeOptions: Array<number>;
@@ -60,14 +61,15 @@ class NavigatorComponent implements OnInit {
 
   public goToPage(pageNumber: number): void {
     if (pageNumber <= -1) {
-      this.pageIndex = 0;
-    } else {
-      if (pageNumber >= this.numberOfPages() + 1) {
-        this.pageIndex = this.numberOfPages();
-      } else {
-        this.pageIndex = pageNumber;
-      }
+      pageNumber = 0;
     }
+    if (pageNumber >= this.numberOfPages() + 1) {
+        pageNumber = this.numberOfPages();
+    }
+    this.changePage({
+      pageIndex: pageNumber,
+      pageSize:
+    })
   }
 
 }

@@ -1,10 +1,16 @@
-.go-to-page-field{
+.go-to-page-field {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
   font-size: 12px !important;
 }
 
+.go-to-page-label {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 12px !important;
+  color: rgba(0,0,0,.54);
+}
+
 .mat-form-field {
-  min-width: 15px;
-  max-width: 50px;
+  min-width: 35px;
+  max-width: 45px;
   width: 100%;
 }
