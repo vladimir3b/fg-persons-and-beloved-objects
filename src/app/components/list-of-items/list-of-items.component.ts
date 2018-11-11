@@ -15,11 +15,14 @@ export class ListOfItemsComponent implements OnInit {
   /**
    * Properties
    */
-  public firstIndex: number;
-  public lastIndex: number;
+  public firstPersonsIndex: number;
+  public lastPersonsIndex: number;
+  public firstObjectsIndex: number;
+  public lastObjectsIndex: number;
   public optionIndex: number;
   public pageIndex: number;
   public pageSizeOptions: Array<number>;
+  public indexOpenedPerson: number;
 
   public appellative: { female: string; male: string; };
 
@@ -52,16 +55,24 @@ export class ListOfItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstIndex = 0;
-    this.lastIndex = this.pageSizeOptions[this.optionIndex];
+    this.indexOpenedPerson = -1;
+    this.firstPersonsIndex = 0;
+    this.lastPersonsIndex = this.pageSizeOptions[this.optionIndex];
+    this.firstObjectsIndex = 0;
+    this.lastObjectsIndex = 5;
   }
 
    /**
    * Methods
    */
-  navigate(navigationBorders: INavigationBorders): void {
-    this.firstIndex = navigationBorders.firstElement;
-    this.lastIndex = navigationBorders.lastElement;
+  navigatePersons(navigationBorders: INavigationBorders): void {
+    this.firstPersonsIndex = navigationBorders.firstElement;
+    this.lastPersonsIndex = navigationBorders.lastElement;
+  }
+
+  navigateObjects(navigationBorders: INavigationBorders): void {
+    this.firstObjectsIndex = navigationBorders.firstElement;
+    this.lastObjectsIndex = navigationBorders.lastElement;
   }
 
   public person(id: string): IPerson {
@@ -78,6 +89,16 @@ export class ListOfItemsComponent implements OnInit {
 
   public delete(id: string): void {
     this._managePersons.delete(id);
+  }
+
+  opened(index: number): void {
+    // console.log('opened');
+    this.indexOpenedPerson = index;
+  }
+
+  closed(): void {
+    // console.log('closed');
+    this.indexOpenedPerson = -1;
   }
 
 }

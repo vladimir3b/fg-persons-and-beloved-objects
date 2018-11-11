@@ -10,6 +10,8 @@ import { PageEvent } from '@angular/material/paginator';
 interface INavigationBorders {
   firstElement: number;
   lastElement: number;
+  pageNumber: number;
+  pageSize: number;
 }
 
 @Component({
@@ -49,6 +51,8 @@ class NavigatorComponent implements OnInit {
     this.pageSize = $event.pageSize;
     this.pageIndex = $event.pageIndex;
     this.navigationBorders.emit({
+      pageSize: this.pageSize,
+      pageNumber: this.pageIndex,
       firstElement: $event.pageSize * $event.pageIndex,
       lastElement: (($event.pageIndex + 1) * $event.pageSize <= $event.length) ?
       ($event.pageIndex + 1) * $event.pageSize : $event.length
@@ -68,8 +72,9 @@ class NavigatorComponent implements OnInit {
     }
     this.changePage({
       pageIndex: pageNumber,
-      pageSize:
-    })
+      pageSize: this.pageSize,
+      length: this.numberOfElements
+    });
   }
 
 }

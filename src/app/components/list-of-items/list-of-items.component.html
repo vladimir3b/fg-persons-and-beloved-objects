@@ -2,7 +2,9 @@
   <div class="col">
     <mat-accordion>
       <mat-expansion-panel
-        *ngFor="let id of listOfPersonsIds | slice : firstIndex : lastIndex"
+        (afterExpand)="opened(index)"
+        (closed)="closed()"
+        *ngFor="let id of listOfPersonsIds | slice : firstPersonsIndex : lastPersonsIndex; let index = index"
         class="alert-info">
         <mat-expansion-panel-header class="alert-secondary row">
           <mat-panel-title class="col-9">
@@ -22,7 +24,7 @@
                 First Name:
               </div>
               <div
-                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
                 {{ person(id).name.firstName }}
               </div>
             </div>
@@ -32,7 +34,7 @@
                 Middle Name:
               </div>
               <div
-                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
                 {{ person(id).name.middleName }}
               </div>
             </div>
@@ -42,7 +44,7 @@
                 Last Name:
               </div>
               <div
-                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
                 {{ person(id).name.lastName }}
               </div>
             </div>
@@ -52,7 +54,7 @@
                 Gender:
               </div>
               <div
-                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
                 {{ person(id).gender }}
               </div>
             </div>
@@ -62,7 +64,7 @@
                 Address:
               </div>
               <div
-                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
                 {{ person(id).address }}
               </div>
             </div>
@@ -72,7 +74,7 @@
                 Phone:
               </div>
               <div
-                class="col pt-1 pb-1 border border-dark border-bottom-0">
+                class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
                 {{ person(id).phone }}
               </div>
             </div>
@@ -81,10 +83,19 @@
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
                 Objects
               </div>
-              <div class="col pt-1 pb-1 border border-dark">
-                <!-- <div *ngFor="let objectId of listOfObjectsForAPerson(id)">
-                  {{ object(objectId).type }} {{ object(objectId).color }}
-                </div> -->
+              <div class="col pt-1 pb-1 border border-dark bg-white">
+                <div *ngIf="index === indexOpenedPerson">
+                  <div *ngFor="let objectId of listOfObjectsForAPerson(id) | slice : firstObjectsIndex : lastObjectsIndex">
+                    {{ object(objectId).type }} {{ object(objectId).color }}
+                  </div>
+                  <fg-navigator
+                    [numberOfElements]="listOfObjectsForAPerson(id).length"
+                    [pageSizeOptions]="[5, 10, 15]"
+                    [optionIndex]="5"
+                    [pageIndex]="0"
+                    (navigationBorders)="navigateObjects($event)">
+                  </fg-navigator>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -114,5 +125,5 @@
   [pageSizeOptions]="pageSizeOptions"
   [optionIndex]="optionIndex"
   [pageIndex]="pageIndex"
-  (navigationBorders)="navigate($event)">
+  (navigationBorders)="navigatePersons($event)">
 </fg-navigator>
