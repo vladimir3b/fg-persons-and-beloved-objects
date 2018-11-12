@@ -2,20 +2,39 @@
   <div class="col">
     <mat-accordion>
       <mat-expansion-panel
-        (afterExpand)="opened(index)"
-        (closed)="closed()"
-        *ngFor="let id of listOfPersonsIds | slice : firstPersonsIndex : lastPersonsIndex; let index = index"
+        (afterExpand)="openedPerson(indexPerson)"
+        (closed)="closedPerson()"
+        *ngFor="let id of listOfPersonsIds | slice : firstPersonsIndex : lastPersonsIndex; let indexPerson = index"
         class="alert-info">
-        <mat-expansion-panel-header class="row" [ngClass]="{ 'alert-warning' : index !== indexOpenedPerson }">
-          <mat-panel-title class="col-9">
-            <strong>{{ appellative[person(id).gender] }}</strong>&nbsp;
+        <mat-expansion-panel-header class="row" [ngClass]="{ 'alert-warning' : indexPerson !== indexOpenedPerson }">
+          
+          <!-- panel closed -->
+          <mat-panel-title 
+            *ngIf="indexPerson !== indexOpenedPerson"
+            class="col-9">         
+            {{ appellative[person(id).gender] }}
             {{ person(id).name.firstName }} {{ person(id).name.lastName }} is
             {{ person(id).age() }} years old and has
-            {{ listOfObjectsForAPerson(id).length }} beloved objects.
+            {{ listOfObjectsForAPerson(id).length }} beloved objects.        
           </mat-panel-title>
-          <mat-panel-description class="col-3">
+          <mat-panel-description 
+            *ngIf="indexPerson !== indexOpenedPerson"
+            class="col-3">
             Click to see more...
-          </mat-panel-description>
+          </mat-panel-description>   
+
+          <!-- panel-opened -->
+          <mat-panel-title 
+            class="col-9"
+            *ngIf="indexPerson === indexOpenedPerson">
+            Details for  {{ appellative[person(id).gender] }} {{ person(id).name.firstName }} {{ person(id).name.lastName }}...
+          </mat-panel-title>
+          <mat-panel-description 
+            *ngIf="indexPerson === indexOpenedPerson"
+            class="col-3">
+            Click to close...
+          </mat-panel-description>  
+
          </mat-expansion-panel-header>
          <div class="container">
             <div class="row">
@@ -81,16 +100,104 @@
             <div class="row">
               <div
                 class="col-2 text-right bg-success pt-1 pb-1 text-white">
-                Objects
+                Objects:
               </div>
               <div class="col pt-1 pb-1 border border-dark bg-white">
-                <div *ngIf="index === indexOpenedPerson">
-                  <div *ngFor="let objectId of listOfObjectsForAPerson(id) | slice : firstObjectsIndex : lastObjectsIndex">
-                    <mat-tree [dataSource]="">
-                        <!-- https://www.youtube.com/watch?v=BALaj39rbZE -->
-                    </mat-tree>
-                    {{ object(objectId).type }} {{ object(objectId).color }}
+                <div *ngIf="indexPerson === indexOpenedPerson">                        
+                  <div class="pt-4 pb-2">
+                      <mat-accordion>
+                          <mat-expansion-panel
+                            (afterExpand) = "openedObject(indexObj)"
+                            (closed)="closedObject()"
+                            class="row alert-secondary"
+                            *ngFor="let objectId of listOfObjectsForAPerson(id) | slice : firstObjectsIndex : lastObjectsIndex; let indexObj=index">
+                            <mat-expansion-panel-header>
+
+                              <!-- panel closed -->
+                              <mat-panel-title 
+                                *ngIf="indexObj !== indexOpenedObject">
+                                <div class="col-3">
+                                  {{ object(objectId).type }}
+                                </div>
+                                <div class="col-3">
+                                  {{ object(objectId).age }}
+                                </div>
+                                <div class="col-3">
+                                  {{ object(objectId).color }}
+                                </div>
+                              </mat-panel-title>
+                              <mat-panel-description 
+                                *ngIf="indexObj !== indexOpenedObject" 
+                                class="col-3">
+                                  Click to see more...
+                              </mat-panel-description>
+
+                              <!-- panel opened -->
+                              <mat-panel-title 
+                              *ngIf="indexObj === indexOpenedObject"
+                                class="col-9">
+                                Details about {{ object(objectId).type }}:
+                              </mat-panel-title>
+                              <mat-panel-description 
+                                *ngIf="indexObj === indexOpenedObject" 
+                                class="col-3">
+                                  Click to close...
+                              </mat-panel-description>                                
+                          
+                            </mat-expansion-panel-header>
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-2 pt-1 pb-1 text-right bg-primary text-white">
+                                  Object:
+                                </div>
+                                <div class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
+                                    {{ object(objectId).type }}
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-2 pt-1 pb-1 text-right bg-primary text-white">
+                                  Age:
+                                </div>
+                                <div class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
+                                    {{ object(objectId).age }}
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-2 pt-1 pb-1 text-right bg-primary text-white">
+                                  Color:
+                                </div>
+                                <div class="col pt-1 pb-1 border border-dark border-bottom-0 bg-white">
+                                  {{ object(objectId).color }}
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-2 pt-1 pb-1 text-right bg-primary text-white">
+                                  Description:
+                                </div>
+                                <div class="col pt-1 pb-1 border border-dark bg-white">
+                                  {{ object(objectId).about }}
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-2 pt-3 pb-1">
+                                  <button class="btn btn-outline-info btn-sm btn-block">
+                                    Edit object
+                                  </button>
+                                </div>
+                                <div class="col-2 pt-3 pb-1">
+                                  <button
+                                    (click)="deleteObject(objectId)"
+                                    class="btn btn-outline-danger btn-sm btn-block">
+                                    Delete object
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-expansion-panel>                    
+                        </mat-accordion>
                   </div>
+                                     
+                 
                   <fg-navigator
                     [numberOfElements]="listOfObjectsForAPerson(id).length"
                     [pageSizeOptions]="[5, 10, 15]"
@@ -109,7 +216,7 @@
               </div>
               <div class="col-2 pt-3 pb-1">
                 <button
-                  (click)="delete(id)"
+                  (click)="deletePerson(id)"
                   class="btn btn-outline-danger btn-sm btn-block">
                   Delete person
                 </button>

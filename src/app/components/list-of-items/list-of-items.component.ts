@@ -23,6 +23,7 @@ export class ListOfItemsComponent implements OnInit {
   public pageIndex: number;
   public pageSizeOptions: Array<number>;
   public indexOpenedPerson: number;
+  public indexOpenedObject: number;
 
   public appellative: { female: string; male: string; };
 
@@ -56,6 +57,7 @@ export class ListOfItemsComponent implements OnInit {
 
   ngOnInit() {
     this.indexOpenedPerson = -1;
+    this.indexOpenedObject = -1;
     this.firstPersonsIndex = 0;
     this.lastPersonsIndex = this.pageSizeOptions[this.optionIndex];
     this.firstObjectsIndex = 0;
@@ -87,18 +89,36 @@ export class ListOfItemsComponent implements OnInit {
     return this._manageObjects.listOfObjectsForAPerson(personId);
   }
 
-  public delete(id: string): void {
+  public deletePerson(id: string): void {
     this._managePersons.delete(id);
+    this.indexOpenedPerson = -1;
+    this.indexOpenedObject = -1;
   }
 
-  opened(index: number): void {
+  public deleteObject(id: string): void {
+    this._manageObjects.delete(id);
+    this.indexOpenedObject = -1;
+  }
+
+  openedPerson(index: number): void {
     // console.log('opened');
     this.indexOpenedPerson = index;
   }
 
-  closed(): void {
+  closedPerson(): void {
     // console.log('closed');
     this.indexOpenedPerson = -1;
   }
+
+  openedObject(index: number): void {
+    console.log('opened');
+    this.indexOpenedObject = index;
+  }
+
+  closedObject(): void {
+    console.log('closed');
+    this.indexOpenedObject = -1;
+  }
+
 
 }
