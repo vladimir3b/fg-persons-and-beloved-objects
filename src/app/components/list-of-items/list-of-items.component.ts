@@ -1,9 +1,34 @@
+import { Subject } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { INavigationBorders } from '../navigator/navigator.component';
 import { ManagePersonsService, PersonsModifiedEvent } from 'src/app/services/manage-persons.service';
 import { ManageObjectsService } from 'src/app/services/manage-objects.service';
 import { IPerson } from 'src/data/person.interface';
 import { IObject } from 'src/data/object.interface';
+
+const PAGE_SIZE_OPTIONS_FOR_PERSONS = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100];
+const OPTION_INDEX_FOR_PERSONS = 1;
+const PAGE_NUMBER_FOR_PERSONS = 0;
+
+interface IItemStat {
+  person: number;
+  object: number;
+}
+
+interface IListOfItems {
+  pageNumber: IItemStat;
+  itemsPerPage: IItemStat;
+  selectedIndex: IItemStat;
+}
+
+interface IManageIndexesForLists {
+  pageSizeOptions: Array<number>;
+  optionIndex: number;
+  pageNumber: number;
+  firstIndex: number;
+  lastIndex: number;
+  openedIndex: number;
+}
 
 @Component({
   selector: 'fg-list-of-items',
@@ -15,13 +40,30 @@ export class ListOfItemsComponent implements OnInit {
   /**
    * Properties
    */
+  private _itemsPerPagePersons: number;
+  private _itemsPerPageObjects: number;
+  private _pageNumberPersons: number;
+  private _pageNumberObjects: number;
+
+  public manageIndexesForPersonsList: IManageIndexesForLists;
+  public manageIndexesForObjectsList: IManageIndexesForLists;
+
   public firstPersonsIndex: number;
   public lastPersonsIndex: number;
   public firstObjectsIndex: number;
   public lastObjectsIndex: number;
-  public optionIndex: number;
-  public pageIndex: number;
-  public pageSizeOptions: Array<number>;
+  public pageSizeOptionsIndex: {
+    persons: number;
+    objects: number;
+  } ;
+  public pageNumber:{
+    persons: number;
+    objects: number;
+  }
+  public pageSizeOptions: { 
+    persons: Array<number>;
+    objects: Array<number>
+  };
   public indexOpenedPerson: number;
   public indexOpenedObject: number;
 
@@ -32,6 +74,7 @@ export class ListOfItemsComponent implements OnInit {
     return this.listOfPersonsIds.length;
   }
 
+  public dataListOfItems: Subject<IListOfItems>;
 
   /**
    * Life Cycle Hooks
@@ -40,39 +83,79 @@ export class ListOfItemsComponent implements OnInit {
     private _managePersons: ManagePersonsService,
     private _manageObjects: ManageObjectsService
   ) {
+    
     this.appellative = {
       female: 'Mrs.',
       male: 'Mr.'
     };
-    this.optionIndex = 1;
-    this.pageIndex = 0;
-    this.pageSizeOptions = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100];
+    this.manageIndexesForPersonsList = {
+      pageSizeOptions: PAGE_SIZE_OPTIONS_FOR_PERSONS,
+      optionIndex: OPTION_INDEX_FOR_PERSONS,
+      pageNumber: PAGE_NUMBER_FOR_PERSONS,
+      firstIndex: 0,
+      lastIndex: 
+    }
+    this.pageSizeOptionsIndex = {
+      persons: 0,
+      objects: 0
+    };
+    this.pageNumber = {
+      persons: 4,
+      objects: 3
+    };
+    this.pageSizeOptions = {
+      persons: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100],
+      objects: [5, 10, 15]
+    };
     this._managePersons.personsModified.subscribe((personModified: PersonsModifiedEvent) => {
       this.listOfPersonsIds = this._managePersons.listOfPersonsIds();
       if (personModified.operation === 'delete') {
         console.log(`Person ${ personModified.item.name.firstName } ${ personModified.item.name.lastName } was deleted...`);
       }
     });
+    this.dataListOfItems = new Subject();
   }
 
   ngOnInit() {
     this.indexOpenedPerson = -1;
     this.indexOpenedObject = -1;
     this.firstPersonsIndex = 0;
-    this.lastPersonsIndex = this.pageSizeOptions[this.optionIndex];
+    this.lastPersonsIndex = this.pageSizeOptions.persons[this.pageSizeOptionsIndex] ;
     this.firstObjectsIndex = 0;
     this.lastObjectsIndex = 5;
+    this._itemsPerPagePersons = this.pageSizeOptions.persons[this.pageSizeOptionsIndex] ;
+    // this._itemsPerPageObjects = 
   }
 
    /**
    * Methods
    */
-  navigatePersons(navigationBorders: INavigationBorders): void {
+  public emitDataListOfItems() {
+    let l: IListOfItems = {
+      itemsPerPage: {
+        person: this._itemsPerPagePersons,
+        object: this._itemsPerPageObjects
+      },
+      pageNumber: {
+        person: this._pageNumberPersons,
+        object: this._pageNumberObjects
+      },
+      selectedIndex: {
+        person: this.indexOpenedPerson,
+        object: this.indexOpenedObject
+      }
+    }
+    console.log(l);
+  }
+
+  public navigatePersons(navigationBorders: INavigationBorders): void { 
+    // this._
     this.firstPersonsIndex = navigationBorders.firstElement;
     this.lastPersonsIndex = navigationBorders.lastElement;
   }
 
-  navigateObjects(navigationBorders: INavigationBorders): void {
+  public navigateObjects(navigationBorders: INavigationBorders): void {
+    console.log(navigationBorders);
     this.firstObjectsIndex = navigationBorders.firstElement;
     this.lastObjectsIndex = navigationBorders.lastElement;
   }
@@ -101,22 +184,18 @@ export class ListOfItemsComponent implements OnInit {
   }
 
   openedPerson(index: number): void {
-    // console.log('opened');
     this.indexOpenedPerson = index;
   }
 
   closedPerson(): void {
-    // console.log('closed');
     this.indexOpenedPerson = -1;
   }
 
   openedObject(index: number): void {
-    console.log('opened');
     this.indexOpenedObject = index;
   }
 
   closedObject(): void {
-    console.log('closed');
     this.indexOpenedObject = -1;
   }
 

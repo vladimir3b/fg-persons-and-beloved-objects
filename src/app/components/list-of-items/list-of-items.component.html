@@ -104,7 +104,7 @@
               </div>
               <div class="col pt-1 pb-1 border border-dark bg-white">
                 <div *ngIf="indexPerson === indexOpenedPerson">                        
-                  <div class="pt-4 pb-2">
+                  <div class="pt-3 pb-2 pr-2 pl-2">
                       <mat-accordion>
                           <mat-expansion-panel
                             (afterExpand) = "openedObject(indexObj)"
@@ -196,13 +196,13 @@
                           </mat-expansion-panel>                    
                         </mat-accordion>
                   </div>
-                                     
-                 
+                                    
+                
                   <fg-navigator
                     [numberOfElements]="listOfObjectsForAPerson(id).length"
-                    [pageSizeOptions]="[5, 10, 15]"
-                    [optionIndex]="5"
-                    [pageIndex]="0"
+                    [pageSizeOptions]="pageSizeOptions.objects"
+                    [optionIndex]="1"
+                    [pageIndex]="1"
                     (navigationBorders)="navigateObjects($event)">
                   </fg-navigator>
                 </div>
@@ -232,8 +232,8 @@
   [showGoToPage]="true"
   [showFirstLastButtons]="true"
   [numberOfElements]="numberOfElements"
-  [pageSizeOptions]="pageSizeOptions"
-  [optionIndex]="optionIndex"
-  [pageIndex]="pageIndex"
+  [pageSizeOptions]="pageSizeOptions.persons"
+  [optionIndex]="pageSizeOptionsIndex.persons"
+  [pageIndex]="pageNumber.persons"
   (navigationBorders)="navigatePersons($event)">
 </fg-navigator>
